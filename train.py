@@ -89,6 +89,7 @@ def main():
 	
 	for i in range(args.epochs):
 		batch_no = 0
+		print('data length: ', loaded_data['data_length'])
 		while batch_no*args.batch_size < loaded_data['data_length']:
 			real_images, wrong_images, caption_vectors, z_noise, image_files = get_training_batch(batch_no, args.batch_size, 
 				args.image_size, args.z_dim, args.caption_vector_length, 'train', args.data_dir, args.data_set, loaded_data)
@@ -139,7 +140,7 @@ def load_training_data(data_dir, data_set):
 	if data_set == 'flowers':
 		h = h5py.File(join(data_dir, 'flower_tv.hdf5'))
 		flower_captions = {}
-		for ds in h.iteritems():
+		for ds in h.items():
 			flower_captions[ds[0]] = np.array(ds[1])
 		image_list = [key for key in flower_captions]
 		image_list.sort()
@@ -147,6 +148,8 @@ def load_training_data(data_dir, data_set):
 		img_75 = int(len(image_list)*0.75)
 		training_image_list = image_list[0:img_75]
 		random.shuffle(training_image_list)
+		print('image_list len: ', len(training_image_list))
+		print('flower_captions len: ', len(flower_captions))
 		
 		return {
 			'image_list' : training_image_list,
